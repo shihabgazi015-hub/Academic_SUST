@@ -19,7 +19,7 @@ A differential equation involving  partial derivatives of one or more dependent 
 * PDE
 	$\frac{\partial v}{\partial \sigma} + \frac{\partial v}{\partial t} = v$
 
-	$\frac{\partial^2u}{\partialx^2}+\frac{\partial^2u}{\partialy^2}+\frac{\partial^2u}{\partialz^2} = 0$
+	$\frac{\partial^2u}{\partial x^2}+\frac{\partial^2u}{\partial y^2}+\frac{\partial^2u}{\partial z^2} = 0$
 
 * Not DE but Derivative
 	$\frac{d}{dx}(e^(ax)) = ae^(ax)$
