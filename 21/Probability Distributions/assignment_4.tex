@@ -1,0 +1,467 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- UNIVERSAL PREAMBLE BLOCK ---
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+
+\usepackage[english, bidi=basic, provide=*]{babel}
+
+\babelprovide[import, onchar=ids fonts]{english}
+
+% Set default/Latin font to Sans Serif in the main (rm) slot for a modern look
+\babelfont{rm}{Noto Sans}
+
+% --- Essential Math Packages ---
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{microtype}
+\usepackage{booktabs} % For professional tables
+\usepackage{enumitem} % For better list spacing
+\setlist[itemize]{label=-}
+
+% --- Graphics and Plotting ---
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{colormaps}
+
+% --- Color Palette and Box Environments ---
+\usepackage[dvipsnames]{xcolor}
+\usepackage[most]{tcolorbox}
+
+% Define the Green Academic Palette
+\definecolor{DeepGreen}{RGB}{20, 70, 40}
+\definecolor{AccentGreen}{RGB}{46, 125, 75}
+\definecolor{LightGreenBg}{RGB}{242, 249, 245}
+\definecolor{BorderGray}{RGB}{210, 220, 215}
+
+% Custom Box for Problem Statements
+\newtcolorbox{problem}[1]{
+    enhanced,
+    breakable,
+    colback=LightGreenBg,
+    colframe=AccentGreen,
+    fonttitle=\bfseries,
+    title={#1},
+    arc=3mm,
+    boxrule=1pt,
+    left=6pt, right=6pt, top=6pt, bottom=6pt,
+    attach boxed title to top left={xshift=5mm, yshift=-3mm},
+    boxed title style={colback=AccentGreen, arc=1.5mm},
+    shadow={2mm}{-1.5mm}{0mm}{black!15}
+}
+
+% Custom Box for Theorems/Definitions
+\newtcolorbox{definitionbox}[1]{
+    colback=white,
+    colframe=DeepGreen,
+    fonttitle=\bfseries,
+    title={#1},
+    arc=2mm,
+    boxrule=1.5pt,
+    leftborder=5mm
+}
+
+% Custom Math Macros
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\CV}{\mathrm{CV}}
+
+% Hyperref (must be last)
+\usepackage[colorlinks=true, linkcolor=AccentGreen, urlcolor=DeepGreen, citecolor=AccentGreen]{hyperref}
+
+\begin{document}
+
+% ==========================================
+% TIKZ GENERATED BOOK COVER
+% ==========================================
+\begin{titlepage}
+    \begin{tikzpicture}[remember picture, overlay]
+        % Background Fill
+        \fill[color=DeepGreen!95!black] (current page.south west) rectangle (current page.north east);
+        
+        % 3D Mathematical Surface (Hyperboloid of one sheet)
+        \node at (current page.center) {
+            \begin{tikzpicture}
+                \begin{axis}[
+                    hide axis,
+                    view={30}{20},
+                    colormap={greenish}{color(0cm)=(DeepGreen!90!black); color(1cm)=(LightGreenBg)},
+                    width=16cm,
+                    height=18cm,
+                    z buffer=sort,
+                ]
+                % Lower cone part
+                \addplot3[
+                    surf,
+                    samples=35,
+                    domain=0:360,
+                    y domain=-2.5:2.5,
+                    opacity=0.6
+                ]
+                ({sqrt(1+y^2)*cos(x)}, {sqrt(1+y^2)*sin(x)}, {y});
+                
+                % Intersecting Plane 1 (z = 0)
+                \addplot3[
+                    surf,
+                    samples=2,
+                    domain=-4:4,
+                    y domain=-4:4,
+                    color=AccentGreen!50!white,
+                    opacity=0.4
+                ] {0};
+                
+                % Axes lines
+                \addplot3[thick, white, -latex] coordinates {(0,0,0) (4,0,0)} node[right] {$y$};
+                \addplot3[thick, white, -latex] coordinates {(0,0,0) (0,4,0)} node[left] {$x$};
+                \addplot3[thick, white, -latex] coordinates {(0,0,0) (0,0,3.5)} node[above] {$z$};
+                \end{axis}
+            \end{tikzpicture}
+        };
+
+        % Title Text Box
+        \node[text=white, align=center] at ([yshift=-5cm]current page.north) {
+            {\fontsize{42}{50}\selectfont \textsc{Discrete Probability}}\\[0.8em]
+            {\fontsize{38}{45}\selectfont \textsc{Distributions}}\\[1.5em]
+            {\fontsize{18}{22}\selectfont \textit{An Intuitive \& Mathematical Approach}}\\[3em]
+            {\LARGE \textsc{Assignment 4 Solutions}}
+        };
+        
+        % Bottom Text
+        \node[text=white!80, align=center] at ([yshift=3cm]current page.south) {
+            {\large Prepared with \LaTeX\ \& \texttt{TikZ}}
+        };
+    \end{tikzpicture}
+\end{titlepage}
+
+\clearpage
+\tableofcontents
+\clearpage
+
+\section{The Geometric Distribution}
+
+\begin{problem}{Question 1}
+Derive the probability mass function (PMF) of the geometric distribution.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+Consider a sequence of independent Bernoulli trials, each with a constant probability of success $p$ and a probability of failure $q = 1 - p$. Let the discrete random variable $X$ denote the number of failures preceding the first successful trial. 
+
+If exactly $(x+1)$ trials are required to achieve the first success, then the first $x$ trials must be failures, and the $(x+1)$-th trial must be a success. The random variable $X$ can take on non-negative integer values: $x = 0, 1, 2, \dots, \infty$.
+
+Because the trials are independent, the joint probability of $x$ failures followed by one success is the product of their individual probabilities. We observe the following sequence of probabilities:
+\begin{align*}
+    P(X = 0) &= p \\
+    P(X = 1) &= qp \\
+    P(X = 2) &= q^2p \\
+    &\vdots \\
+    P(X = x) &= q^x p
+\end{align*}
+Thus, the probability mass function (PMF) of the geometric distribution is given by:
+\begin{equation}
+    f(x; p) = P(X = x) = p q^x, \quad \text{for } x = 0, 1, 2, \dots
+\end{equation}
+
+\vspace{0.5cm}
+\begin{problem}{Question 2}
+Show that the probability mass function (PMF) of the geometric distribution satisfies the axioms of probability.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+To be a valid probability mass function, $f(x)$ must satisfy two fundamental axioms:
+
+\textbf{Axiom 1: Non-negativity} \\
+Since $p$ is a probability, $0 < p < 1$, which implies $0 < q < 1$. Consequently, for any non-negative integer $x$, $q^x \ge 0$. Therefore:
+\[ P(X = x) = p q^x \ge 0 \quad \text{for all } x \in \{0, 1, 2, \dots\} \]
+
+\textbf{Axiom 2: Total Probability Equals One} \\
+We must show that the sum of all probabilities over the support of $X$ is exactly 1.
+\begin{align*}
+    \sum_{x=0}^{\infty} P(X = x) &= \sum_{x=0}^{\infty} p q^x \\
+    &= p \sum_{x=0}^{\infty} q^x \\
+    &= p \left( 1 + q + q^2 + q^3 + \dots \right)
+\end{align*}
+Recognizing the infinite geometric series with a common ratio $q \in (0, 1)$, its sum is $\frac{1}{1 - q}$. Thus:
+\[ \sum_{x=0}^{\infty} P(X = x) = p \left( \frac{1}{1 - q} \right) \]
+Since $p + q = 1$, we have $1 - q = p$. Substituting this yields:
+\[ \sum_{x=0}^{\infty} P(X = x) = p \left( \frac{1}{p} \right) = 1 \]
+Therefore, $f(x) = p q^x$ is a valid probability mass function.
+
+\vspace{0.5cm}
+\begin{problem}{Question 3}
+Explain, with examples, how the probability mass function (PMF) of the geometric distribution changes as the probability of success increases.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+As the probability of success ($p$) increases, the geometric distribution becomes more heavily right-skewed and concentrated near $x = 0$. This intuitively indicates that with a higher success rate, the expected number of failures before the first success rapidly decreases.
+
+Consider three scenarios with varying probabilities of success:
+\begin{itemize}
+    \item \textbf{Small Probability ($p = 0.2, q = 0.8$):} The PMF decreases slowly, leaving a long right tail.
+    \item \textbf{Moderate Probability ($p = 0.5, q = 0.5$):} The PMF decreases at a moderate exponential rate.
+    \item \textbf{Large Probability ($p = 0.8, q = 0.2$):} The PMF decreases rapidly and is highly concentrated at $x = 0$.
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}[
+        width=12cm, height=7cm,
+        ybar=2pt,
+        bar width=8pt,
+        enlarge x limits=0.15,
+        legend style={at={(0.5,-0.2)}, anchor=north, legend columns=-1},
+        ylabel={Probability $P(X=x)$},
+        xlabel={Number of failures ($x$)},
+        symbolic x coords={0, 1, 2, 3, 4},
+        xtick=data,
+        nodes near coords,
+        nodes near coords align={vertical},
+        every node near coord/.append style={font=\tiny},
+        ymin=0, ymax=0.9,
+    ]
+    % p = 0.2
+    \addplot[fill=BorderGray, draw=black] coordinates {(0,0.200) (1,0.160) (2,0.128) (3,0.102) (4,0.082)};
+    % p = 0.5
+    \addplot[fill=AccentGreen!60, draw=black] coordinates {(0,0.500) (1,0.250) (2,0.125) (3,0.063) (4,0.031)};
+    % p = 0.8
+    \addplot[fill=DeepGreen, draw=black] coordinates {(0,0.800) (1,0.160) (2,0.032) (3,0.006) (4,0.001)};
+    
+    \legend{$p=0.2$, $p=0.5$, $p=0.8$}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+As visually demonstrated, increasing the probability of success shifts the statistical weight toward the origin, confirming that the first success is expected to occur sooner.
+
+\clearpage
+\begin{problem}{Question 4}
+Derive the moment generating function (MGF) of the geometric distribution and hence obtain its coefficient of variation.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+The moment generating function (MGF), $M_X(t)$, is defined as the expected value of $e^{tX}$:
+\begin{align*}
+    M_X(t) &= \E[e^{tX}] = \sum_{x=0}^{\infty} e^{tx} P(X=x) \\
+    &= \sum_{x=0}^{\infty} e^{tx} (p q^x) \\
+    &= p \sum_{x=0}^{\infty} (q e^t)^x
+\end{align*}
+This is an infinite geometric series with common ratio $(q e^t)$. For convergence, we require $qe^t < 1$, which means $t < -\ln(q)$. Summing the series yields the MGF:
+\begin{equation}
+    M_X(t) = \frac{p}{1 - q e^t}
+\end{equation}
+
+\noindent\textbf{Mean ($\mu$):} We evaluate the first derivative of the MGF at $t=0$.
+\[ M_X'(t) = \frac{d}{dt} \left( p(1 - qe^t)^{-1} \right) = -p(1 - qe^t)^{-2}(-qe^t) = \frac{pqe^t}{(1 - qe^t)^2} \]
+\[ \mu = \E[X] = M_X'(0) = \frac{pq}{(1 - q)^2} = \frac{pq}{p^2} = \frac{q}{p} \]
+
+\noindent\textbf{Variance ($\sigma^2$):} We evaluate the second derivative at $t=0$.
+\[ M_X''(t) = \frac{d}{dt} \left( \frac{pqe^t}{(1 - qe^t)^2} \right) = \frac{pqe^t}{(1 - qe^t)^2} + \frac{2pq^2e^{2t}}{(1 - qe^t)^3} \]
+\[ \E[X^2] = M_X''(0) = \frac{pq}{(1 - q)^2} + \frac{2pq^2}{(1 - q)^3} = \frac{q}{p} + \frac{2q^2}{p^2} = \frac{q(p + 2q)}{p^2} = \frac{q(1+q)}{p^2} \]
+Using the variance formula $\Var[X] = \E[X^2] - (\E[X])^2$:
+\[ \Var[X] = \frac{q(1+q)}{p^2} - \frac{q^2}{p^2} = \frac{q + q^2 - q^2}{p^2} = \frac{q}{p^2} \]
+Standard Deviation: $\sigma = \sqrt{\Var[X]} = \frac{\sqrt{q}}{p}$.
+
+\noindent\textbf{Coefficient of Variation (CV):}
+\[ \CV = \left( \frac{\sigma}{\mu} \right) \times 100\% = \frac{\frac{\sqrt{q}}{p}}{\frac{q}{p}} \times 100\% = \frac{1}{\sqrt{q}} \times 100\% \]
+
+\vspace{0.5cm}
+\begin{problem}{Question 5}
+State and prove the memoryless property of the geometric distribution.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+A discrete random variable $X$ possesses the \textbf{memoryless property} if, for any non-negative integers $m$ and $n$, it satisfies:
+\[ P(X \ge m + n \mid X \ge m) = P(X \ge n) \]
+This signifies that the probability of waiting for $n$ additional failures does not depend on how many failures ($m$) have already occurred. The distribution "forgets" the past.
+
+\textbf{Proof:} \\
+First, we find the cumulative survival probability $P(X \ge k)$:
+\[ P(X \ge k) = \sum_{x=k}^{\infty} p q^x = p q^k \sum_{i=0}^{\infty} q^i = p q^k \left( \frac{1}{1-q} \right) = \frac{p q^k}{p} = q^k \]
+Using the definition of conditional probability:
+\begin{align*}
+    P(X \ge m + n \mid X \ge m) &= \frac{P((X \ge m + n) \cap (X \ge m))}{P(X \ge m)} \\
+    &= \frac{P(X \ge m + n)}{P(X \ge m)} \quad \text{(since $X \ge m+n \subseteq X \ge m$)} \\
+    &= \frac{q^{m+n}}{q^m} \\
+    &= q^n \\
+    &= P(X \ge n)
+\end{align*}
+Thus, the memoryless property is proven.
+
+\clearpage
+\section{The Negative Binomial Distribution}
+
+\begin{problem}{Question 6}
+Derive the probability mass function (PMF) of the negative binomial distribution, and explain why it is called the "negative binomial" distribution.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+Suppose we have a succession of independent Bernoulli trials where the probability of success, $p$, remains constant from trial to trial. Let $f(x; n, p)$ denote the probability that there are exactly $x$ failures preceding the $n$-th success.
+
+For the $n$-th success to occur on the $(x+n)$-th trial, two independent conditions must be met:
+\begin{enumerate}
+    \item There must be exactly $(n-1)$ successes and $x$ failures among the first $(x+n-1)$ trials. The probability of this arrangement is given by the binomial probability:
+    \[ \binom{x+n-1}{n-1} p^{n-1} q^x \]
+    \item The final, $(x+n)$-th trial must be a success, which has a probability of $p$.
+\end{enumerate}
+Multiplying these probabilities together yields the PMF:
+\begin{equation}
+    f(x; n, p) = \binom{x+n-1}{n-1} p^{n-1} q^x \cdot p = \binom{x+n-1}{n-1} p^n q^x, \quad x = 0, 1, 2, \dots
+\end{equation}
+
+\noindent\textbf{Nomenclature:} \\
+Unlike the ordinary binomial distribution where the number of trials is fixed and the number of successes is random, the negative binomial distribution fixes the number of successes ($n$) and allows the number of trials (or failures, $x$) to be random. Furthermore, it derives its name from the fact that the probabilities represent successive terms in the binomial expansion of $(1-q)^{-n}$ (which involves a negative exponent).
+
+\vspace{0.5cm}
+\begin{problem}{Question 7}
+Derive the moment generating function (MGF) of the negative binomial distribution and hence obtain its coefficient of variation.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+The MGF is calculated as follows:
+\begin{align*}
+    M_X(t) &= \E[e^{tX}] = \sum_{x=0}^{\infty} \binom{x+n-1}{x} p^n q^x e^{tx} \\
+    &= p^n \sum_{x=0}^{\infty} \binom{x+n-1}{x} (qe^t)^x
+\end{align*}
+Using the negative binomial expansion identity $\sum_{x=0}^{\infty} \binom{x+n-1}{x} z^x = (1-z)^{-n}$, we substitute $z = qe^t$:
+\begin{equation}
+    M_X(t) = p^n (1 - qe^t)^{-n} = \left( \frac{p}{1 - qe^t} \right)^n
+\end{equation}
+
+By utilizing the logarithmic derivative method ($\ln M_X(t) = n \ln p - n \ln(1 - qe^t)$) and differentiating, we obtain the moments:
+\begin{align*}
+    \mu &= \E[X] = M_X'(0) = \frac{nq}{p} \\
+    \Var[X] &= \E[X^2] - (\E[X])^2 = \frac{nq}{p^2}
+\end{align*}
+Standard Deviation: $\sigma = \sqrt{\Var[X]} = \frac{\sqrt{nq}}{p}$.
+
+\noindent\textbf{Coefficient of Variation (CV):}
+\[ \CV = \frac{\sigma}{\mu} \times 100\% = \frac{\sqrt{nq}/p}{nq/p} \times 100\% = \frac{1}{\sqrt{nq}} \times 100\% \]
+
+\clearpage
+\begin{problem}{Question 8}
+Show that the sum of independent negative binomial random variables having a common parameter $p$ is also a negative binomial random variable.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+Let $X_1 \sim \mathrm{NB}(n_1, p)$ and $X_2 \sim \mathrm{NB}(n_2, p)$ be independent random variables. 
+The MGF of a sum of independent random variables is the product of their individual MGFs:
+\begin{align*}
+    M_{X_1 + X_2}(t) &= M_{X_1}(t) \cdot M_{X_2}(t) \\
+    &= \left( \frac{p}{1 - qe^t} \right)^{n_1} \cdot \left( \frac{p}{1 - qe^t} \right)^{n_2} \\
+    &= \left( \frac{p}{1 - qe^t} \right)^{n_1 + n_2}
+\end{align*}
+This resulting function is exactly the MGF of a negative binomial distribution with parameters $(n_1 + n_2, p)$. Therefore, $X_1 + X_2 \sim \mathrm{NB}(n_1 + n_2, p)$.
+
+\vspace{0.5cm}
+\begin{problem}{Question 9}
+Show that, under suitable limiting conditions, the negative binomial distribution converges to the Poisson distribution.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+The PMF of the negative binomial is $P(X=x) = \frac{n(n+1)\dots(n+x-1)}{x!} p^n q^x$. \\
+Let $n \to \infty$ and $q \to 0$ such that the mean $nq = \lambda$ (a constant). Thus, $q = \frac{\lambda}{n}$ and $p = 1 - \frac{\lambda}{n}$. 
+We substitute these into the PMF:
+\begin{align*}
+    \lim_{n \to \infty} P(X=x) &= \lim_{n \to \infty} \frac{n(n+1)\dots(n+x-1)}{x!} \left(1 - \frac{\lambda}{n}\right)^n \left(\frac{\lambda}{n}\right)^x \\
+    &= \frac{\lambda^x}{x!} \lim_{n \to \infty} \left[ \frac{n}{n} \cdot \frac{n+1}{n} \dots \frac{n+x-1}{n} \right] \left(1 - \frac{\lambda}{n}\right)^n
+\end{align*}
+As $n \to \infty$:
+1. The fractional terms $\left(1 + \frac{1}{n}\right) \dots \left(1 + \frac{x-1}{n}\right) \to 1$.
+2. The term $\left(1 - \frac{\lambda}{n}\right)^n \to e^{-\lambda}$.
+
+Therefore:
+\[ \lim_{n \to \infty} P(X=x) = \frac{\lambda^x e^{-\lambda}}{x!} \]
+This is exactly the PMF of the Poisson distribution.
+
+\clearpage
+\section{Relationships Between Distributions}
+
+\begin{problem}{Questions 10 \& 11}
+Explain why the geometric and negative binomial distributions are regarded as the discrete counterparts of the exponential and gamma distributions, respectively.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+These distribution pairs represent fundamentally identical physical processes modeled in different mathematical spaces (discrete trials vs. continuous time).
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{7cm} p{7cm}}
+\toprule
+\textbf{Geometric Distribution (Discrete)} & \textbf{Exponential Distribution (Continuous)} \\
+\midrule
+Models waiting time in \textit{number of trials}. & Models waiting time in \textit{continuous time}. \\
+Discrete random variable. & Continuous random variable. \\
+Counts failures before the \textbf{first} success. & Measures time until the \textbf{first} event. \\
+Possesses the memoryless property. & Possesses the memoryless property. \\
+PMF: $P(X=x) = p q^x$ & PDF: $f(x) = \lambda e^{-\lambda x}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Similarly, just as the Negative Binomial distribution is the sum of $n$ independent Geometric random variables, the Gamma distribution is the sum of $n$ independent Exponential random variables.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{p{7cm} p{7cm}}
+\toprule
+\textbf{Negative Binomial Distribution} & \textbf{Gamma Distribution} \\
+\midrule
+Waiting time in \textit{number of trials}. & Waiting time in \textit{continuous time}. \\
+Counts failures before the $n$\textbf{-th} success. & Measures time until the $n$\textbf{-th} event. \\
+Sum of $n$ i.i.d. geometric variables. & Sum of $n$ i.i.d. exponential variables. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{0.5cm}
+\begin{problem}{Questions 12 \& 13}
+Derive the logarithmic series distribution from both the geometric series and as a limiting form of the negative binomial distribution.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+\textbf{1. From the Geometric Series:} \\
+The geometric series expansion is $\frac{1}{1-p} = 1 + p + p^2 + p^3 + \dots$. \\
+Integrating both sides with respect to $p$ yields:
+\[ -\ln(1-p) = p + \frac{p^2}{2} + \frac{p^3}{3} + \dots \]
+To create a valid probability distribution (where probabilities sum to 1), we divide the series by its sum, $-\ln(1-p)$:
+\[ 1 = \frac{p}{-\ln(1-p)} + \frac{p^2}{-2\ln(1-p)} + \frac{p^3}{-3\ln(1-p)} + \dots \]
+This yields the Logarithmic Series PMF: $P(X=x) = \frac{p^x}{-x \ln(1-p)}$ for $x = 1, 2, 3, \dots$
+
+\vspace{0.3cm}
+\noindent\textbf{2. As a Limiting Form of Negative Binomial:} \\
+Given $X \sim \mathrm{NB}(n, p)$, its PMF is $P(X=x) = \frac{\Gamma(n+x)}{x!\Gamma(n)} p^n q^x$. We observe the conditional probability of $X$ given $X > 0$:
+\[ P(X = x \mid X > 0) = \frac{P(X=x)}{1 - P(X=0)} = \frac{\frac{\Gamma(n+x)}{x!\Gamma(n)} p^n q^x}{1 - p^n} \]
+Taking the limit as $n \to 0$, utilizing L'Hôpital's rule on the ratio of approaching zero terms:
+\[ \lim_{n \to 0} P(X = x \mid X > 0) = \frac{q^x}{-x \ln(1-q)} \]
+Substituting parameters yields the standard logarithmic distribution formulation.
+
+\clearpage
+\section{Data-Driven Model Identification}
+
+\begin{problem}{Question 14}
+Describe how the observed sample mean and sample variance can be used to identify the most appropriate discrete probability distribution.
+\end{problem}
+
+\noindent\textbf{Solution:} \\
+When modeling discrete data, comparing the sample mean ($\bar{x}$) and sample variance ($s^2$) is a critical diagnostic tool. Different distributions exhibit distinct theoretical mean-to-variance ratios (dispersion indices). 
+
+By calculating $\bar{x} = \frac{\sum f_i x_i}{\sum f_i}$ and $s^2 = \frac{\sum f_i (x_i - \bar{x})^2}{\sum f_i}$, one can map the observed data properties to the theoretical properties summarized below:
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.6}
+\begin{tabular}{p{3cm} p{2.5cm} p{3cm} p{5.5cm}}
+\toprule
+\textbf{Distribution} & \textbf{Mean ($\mu$)} & \textbf{Variance ($\sigma^2$)} & \textbf{Identification Criterion} \\
+\midrule
+\textbf{Binomial} & $np$ & $npq$ & $s^2 < \bar{x}$; Under-dispersed data with a strict, finite upper limit. \\
+\textbf{Poisson} & $\lambda$ & $\lambda$ & $s^2 \approx \bar{x}$; Equi-dispersed data modeling rare events. \\
+\textbf{Geometric} & $\frac{q}{p}$ & $\frac{q}{p^2}$ & $s^2 > \bar{x}$; Values start at $0$, frequencies decrease strictly and rapidly. \\
+\textbf{Negative Binomial} & $\frac{nq}{p}$ & $\frac{nq}{p^2}$ & $s^2 > \bar{x}$; Over-dispersed count data. \\
+\textbf{Logarithmic} & $\frac{-p}{(1-p)\ln(1-p)}$ & $\frac{-p(p+\ln(1-p))}{(1-p)^2[\ln(1-p)]^2}$ & $s^2 > \bar{x}$; No zero observations, massive spike at $x=1$, long tail. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
