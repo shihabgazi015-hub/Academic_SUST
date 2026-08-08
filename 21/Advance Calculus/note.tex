@@ -1,0 +1,213 @@
+\documentclass[11pt,a4paper]{article}
+
+% --- Essential Typographic & Layout Packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry} % Professional page margins
+\usepackage{microtype}            % Subliminal typographic micro-adjustments
+\usepackage{amsmath,amsfonts}     % Advanced math typesetting
+\usepackage{ulem}                 % Needed for strike-through (\sout)
+\usepackage{enumitem}             % Customized lists without ugly gaps
+
+% --- Color & UI Background Packages ---
+\usepackage[dvipsnames]{xcolor}
+\usepackage[most]{tcolorbox}      % For premium callout boxes / backgrounds
+
+% --- Design Palette Definition ---
+\definecolor{DeepNavy}{RGB}{24, 43, 73}
+\definecolor{AccentBlue}{RGB}{54, 95, 145}
+\definecolor{LightBg}{RGB}{245, 247, 250}
+\definecolor{BorderGray}{RGB}{218, 224, 233}
+
+% --- Custom Header Formatting ---
+\newcommand{\Heading}[1]{\vspace{0.4cm}\noindent\textbf{\textcolor{DeepNavy}{\large #1}}\par\vspace{0.15cm}}
+
+\begin{document}
+
+% --- Title Section ---
+\begin{center}
+    {\LARGE\bfseries\textcolor{DeepNavy}{Advanced Calculus}}
+    \vspace{0.6cm}
+\end{center}
+
+\Heading{Differential Equations (DE):}
+An equation involving derivatives of one or more dependent variables with respect to one or more independent variables is called a differential equation.
+
+\Heading{Ordinary Differential Equations (ODE):}
+A differential equation involving ordinary derivatives of one or more dependent variables with respect to a single independent variable is called an ordinary differential equation.
+
+\Heading{Partial Differential Equation (PDE):}
+A differential equation involving partial derivatives of one or more dependent variables with respect to more than one independent variable is called a partial differential equation.
+
+% --- Stylized Background Callout for Examples ---
+\begin{tcolorbox}[colback=LightBg, colframe=BorderGray, arc=4mm]
+    {\small\textbf{\textcolor{AccentBlue}{EXAMPLES BY CATEGORY}}}
+    \vspace{0.2cm}
+    \begin{description}[leftmargin=0.4cm, style=nextline, font=\normalfont\bfseries\textcolor{DeepNavy}]
+        
+        \item[Ordinary Differential Equations (ODE)]
+        \[ \frac{d^2y}{dx^2} + xy\left(\frac{dy}{dx}\right)^2 = 0 \]
+        \[ \frac{d^4x}{dt^4} + 5\frac{d^2x}{dt^2} + 3x = \sin(t) \]
+        
+        \item[Partial Differential Equations (PDE)]
+        \[ \frac{\partial v}{\partial \sigma} + \frac{\partial v}{\partial t} = v \]
+        \[ \frac{\partial^2u}{\partial x^2} + \frac{\partial^2u}{\partial y^2} + \frac{\partial^2u}{\partial z^2} = 0 \]
+        
+        \item[Not DE but Basic Derivatives]
+        \[ \frac{d}{dx}\left(e^{ax}\right) = ae^{ax} \]
+        \[ \frac{d}{dx}(uv) = u\frac{dv}{dx} + v\frac{du}{dx} \]
+        
+    \end{description}
+\end{tcolorbox}
+
+\Heading{Order of a DE:}
+The order of the highest-order derivative involved in a differential equation is called the order of the differential equation.
+
+\Heading{Degree of a DE:}
+The degree of a differential equation is the power of the highest-order derivative present in the equation.
+
+\begin{tcolorbox}[colback=LightBg, colframe=BorderGray, arc=4mm]
+    {\small\textbf{\textcolor{AccentBlue}{EXAMPLES BY CATEGORY}}}
+    \vspace{0.2cm}
+    \begin{description}[leftmargin=0.4cm, style=nextline, font=\normalfont\bfseries\textcolor{DeepNavy}]
+        \item[1st Order 1st Degree ODE]
+        \[ \frac{dy}{dx} + y = e^x \]
+        
+        \item[2nd Order 1st Degree ODE]
+        \[ \frac{d^2y}{dx^2} + 3\frac{dy}{dx} + 2y = 0 \]
+        
+        \item[2nd Order 2nd Degree ODE]
+        \[ \left(\frac{d^2y}{dx^2}\right)^2 + y\frac{dy}{dx} = 0 \]
+        
+        \item[1st Order 1st Degree PDE]
+        \[ \frac{\partial u}{\partial t} + \frac{\partial u}{\partial x} = 0 \]
+        
+        \item[2nd Order 1st Degree PDE]
+        \[ \frac{\partial^2 u}{\partial t^2} - c^2 \frac{\partial^2 u}{\partial x^2} = 0 \]
+        
+        \item[2nd Order 2nd Degree PDE]
+        \[ \left(\frac{\partial^2 u}{\partial x^2}\right)^2 + \left(\frac{\partial^2 u}{\partial y^2}\right)^2 = 0 \]
+    \end{description}
+\end{tcolorbox}
+
+\Heading{Linear ODE:}
+A linear ordinary differential equation of order $n$, in the dependent variable $y$ and the independent variable $x$, is an equation that can be expressed in the form
+\[
+a_0 y^{(n)} + a_1 y^{(n-1)} + \ldots + a_n y = f(x)
+\]
+or equivalently,
+\[
+a_0(x) \frac{d^n y}{dx^n} + a_1(x) \frac{d^{n-1} y}{dx^{n-1}} + \ldots + a_n(x) y = f(x)
+\]
+where $a_0, a_1, \ldots, a_n$ are functions of $x$ (not identically zero) and $f(x)$ is a given function.
+
+\vspace{0.2cm}
+\noindent\textbf{\textcolor{DeepNavy}{Important Observations:}}
+\begin{enumerate}[label=\arabic*), leftmargin=0.6cm, itemsep=0.05cm]
+    \item The dependent variable $y$ and its various derivatives occur to the first degree only.
+    \item No products of $y$ and/or any of its derivatives are present.
+    \item No transcendental functions of $y$ or its derivatives occur (e.g., $\sin y$, $e^y$).
+\end{enumerate}
+
+\Heading{Nonlinear ODE:}
+A nonlinear ordinary differential equation is an ordinary differential equation that is not linear.
+
+\begin{tcolorbox}[colback=LightBg, colframe=BorderGray, arc=4mm]
+    {\small\textbf{\textcolor{AccentBlue}{EXAMPLES BY CATEGORY}}}
+    \vspace{0.2cm}
+    \begin{description}[leftmargin=0.4cm, style=nextline, font=\normalfont\bfseries\textcolor{DeepNavy}]
+        \item[Linear ODE with Constant Coefficients]
+        \[ \frac{d^2y}{dx^2} + 3\frac{dy}{dx} + 2y = 0 \]
+        
+        \item[Linear ODE with Variable Coefficients]
+        \[ \frac{d^4y}{dx^4} + x^{30}\frac{dy}{dx} + 2y = xe^x \]
+        
+        \item[Nonlinear ODE Examples]
+        \[ \left(\frac{d^2y}{dx^2}\right)^2 + y\frac{dy}{dx} = 0 \]
+        \[ \frac{dy}{dx} + \sin(y) = 0 \] % Replaced the incorrect linear equation with a proper nonlinear one
+        \[ A \frac{d^2y}{dx^2} + K \frac{d^3y}{dx^3} + x \frac{dy}{dx} = x e^x \frac{dx}{dy} \]
+        
+        \item[General Form of a Nonlinear ODE]
+        \[ F\left(x, y, \frac{dy}{dx}, \frac{d^2y}{dx^2}, \ldots, \frac{d^ny}{dx^n}\right) = 0 \]
+    \end{description}
+\end{tcolorbox}
+
+\Heading{What Makes an ODE Nonlinear?}
+An ODE is classified as nonlinear if it violates any of the key linear criteria:
+\begin{itemize}[leftmargin=0.5cm, itemsep=0.05cm]
+    \item \textbf{Higher Powers:} Any $y$ or derivative term has an exponent other than 1.
+    \item \textbf{Product Terms:} The variable $y$ is multiplied by its own derivatives.
+    \item \textbf{Nonlinear Functions:} The equation contains functions like $\sin(y)$, $e^{y}$, or $\ln(y)$.
+\end{itemize}
+
+\Heading{Origin and Application:}
+Differential equations occur in connection with numerous problems encountered across various branches of science and engineering:
+\begin{itemize}[leftmargin=0.5cm, itemsep=0.05cm]
+    \item Population Dynamics
+    \item Dynamical Systems and Chaos
+    \item Fluid Dynamics
+    \item Heterogeneous Heat Transfer
+    \item Biophysics and Mathematical Biology
+\end{itemize}
+
+\Heading{Formation of Differential Equations:}
+To form a differential equation from a given relation involving independent/dependent variables and arbitrary constants, we eliminate the arbitrary constants by successive differentiation.
+
+\noindent\textbf{Example Problem:} \\
+Form the differential equation by eliminating the constants $a$ and $b$ from:
+\begin{equation}
+    y = ax + bx^2
+\end{equation}
+
+\noindent\textbf{Solution:} \\
+Given the relation with two arbitrary constants $a$ and $b$:
+\begin{equation}
+    y = ax + bx^2 \label{eq:original}
+\end{equation}
+
+Since there are two arbitrary constants, we differentiate the equation twice with respect to $x$ to eliminate them.
+
+\paragraph{Step 1: First Differentiation}
+Differentiating Equation \eqref{eq:original} with respect to $x$:
+\begin{equation}
+    \frac{dy}{dx} = a + 2bx \label{eq:diff1}
+\end{equation}
+
+\paragraph{Step 2: Second Differentiation}
+Differentiating Equation \eqref{eq:diff1} with respect to $x$:
+\begin{equation}
+    \frac{d^2y}{dx^2} = 2b \implies b = \frac{1}{2}\frac{d^2y}{dx^2} \label{eq:b_val}
+\end{equation}
+
+\paragraph{Step 3: Eliminate Constant $a$}
+Substitute the value of $b$ from Equation \eqref{eq:b_val} into Equation \eqref{eq:diff1}:
+\[
+\frac{dy}{dx} = a + 2\left(\frac{1}{2}\frac{d^2y}{dx^2}\right)x
+\]
+\[
+\frac{dy}{dx} = a + x\frac{d^2y}{dx^2} \implies a = \frac{dy}{dx} - x\frac{d^2y}{dx^2} \label{eq:a_val}
+\]
+
+\paragraph{Step 4: Substitute $a$ and $b$ into the Original Equation}
+Substitute the expressions for $a$ and $b$ back into Equation \eqref{eq:original}:
+\[
+y = \left(\frac{dy}{dx} - x\frac{d^2y}{dx^2}\right)x + \left(\frac{1}{2}\frac{d^2y}{dx^2}\right)x^2
+\]
+Expand the terms:
+\[
+y = x\frac{dy}{dx} - x^2\frac{d^2y}{dx^2} + \frac{1}{2}x^2\frac{d^2y}{dx^2}
+\]
+Combine the like terms of $\frac{d^2y}{dx^2}$:
+\[
+y = x\frac{dy}{dx} - \frac{1}{2}x^2\frac{d^2y}{dx^2}
+\]
+
+\paragraph{Final Form:}
+Multiply the entire equation by $2$ and rearrange terms to obtain the standard form:
+\begin{equation}
+    x^2\frac{d^2y}{dx^2} - 2x\frac{dy}{dx} + 2y = 0
+\end{equation}
+This is the required ordinary differential equation of \text{$2^{nd}$ order and $1^{st}$ degree.}
+
+
+\end{document}
