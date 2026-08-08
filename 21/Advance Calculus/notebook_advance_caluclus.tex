@@ -1,0 +1,788 @@
+\documentclass[11pt, a4paper, openany, oneside]{book}
+
+% --- Universal Preamble & Font Configuration ---
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[english, bidi=basic, provide=*]{babel}
+
+% Set default font to Noto Sans for clean academic legibility
+\babelfont{rm}{Noto Sans}
+
+% --- AMS Mathematics Packages ---
+\usepackage{amsmath, amssymb, amsthm, mathtools}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{microtype}
+
+% --- Color Palette Definition (Green Academic Theme) ---
+\usepackage[dvipsnames]{xcolor}
+\definecolor{DeepEmerald}{RGB}{12, 74, 46}
+\definecolor{ForestGreen}{RGB}{28, 107, 63}
+\definecolor{SageGreen}{RGB}{76, 140, 102}
+\definecolor{MintAccent}{RGB}{142, 202, 163}
+\definecolor{LightSage}{RGB}{242, 247, 244}
+\definecolor{BorderGreen}{RGB}{180, 210, 192}
+\definecolor{DarkText}{RGB}{25, 38, 30}
+\definecolor{LinkGreen}{RGB}{18, 90, 52}
+
+% --- Graphics & Diagram Packages ---
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usetikzlibrary{shapes.geometric, arrows.meta, decorations.pathmorphing, backgrounds, positioning, fit, calc, patterns}
+
+% --- Callout Boxes Setup (tcolorbox) ---
+\usepackage[most]{tcolorbox}
+
+% Definition Box
+\newtcolorbox{definitionbox}[1][]{
+    enhanced,
+    colback=LightSage,
+    colframe=DeepEmerald,
+    coltitle=white,
+    fonttitle=\bfseries\sffamily,
+    title={Definition: #1},
+    arc=3mm,
+    boxrule=0.8pt,
+    drop shadow=black!10!white,
+    left=4mm, right=4mm, top=3mm, bottom=3mm
+}
+
+% Theorem Box
+\newtcolorbox{theorembox}[1][]{
+    enhanced,
+    colback=white,
+    colframe=ForestGreen,
+    coltitle=white,
+    fonttitle=\bfseries\sffamily,
+    title={Theorem: #1},
+    arc=2mm,
+    boxrule=1.2pt,
+    borderline={0.5pt}{2pt}{ForestGreen!40},
+    left=4mm, right=4mm, top=3mm, bottom=3mm
+}
+
+% Example Box
+\newtcolorbox{examplebox}[1][]{
+    enhanced,
+    colback=LightSage!60!white,
+    colframe=SageGreen,
+    coltitle=white,
+    fonttitle=\bfseries\sffamily,
+    title={Worked Example: #1},
+    arc=3mm,
+    boxrule=0.8pt,
+    left=4mm, right=4mm, top=3mm, bottom=3mm
+}
+
+% Category / Summary Box
+\newtcolorbox{summarybox}[1][]{
+    enhanced,
+    colback=LightSage,
+    colframe=BorderGreen,
+    coltitle=DeepEmerald,
+    fonttitle=\bfseries\sffamily,
+    title={#1},
+    arc=4mm,
+    boxrule=1pt,
+    left=4mm, right=4mm, top=3mm, bottom=3mm
+}
+
+% --- Custom Chapter & Section Styling ---
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\sffamily\color{DeepEmerald}}
+  {\Large\color{ForestGreen}\chaptertitlename\ \thechapter}
+  {10pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\Large\bfseries\sffamily\color{DeepEmerald}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\sffamily\color{ForestGreen}}
+  {\thesubsection}{1em}{}
+
+% --- Hyperlinks Configuration ---
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=LinkGreen,
+    citecolor=LinkGreen,
+    urlcolor=LinkGreen,
+    pdfauthor={Advanced Calculus Editorial Board},
+    pdftitle={Advanced Calculus: Differential Equations}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\begin{document}
+
+% =========================================================
+% BOOK COVER PAGE
+% =========================================================
+\begin{titlepage}
+\begin{tikzpicture}[remember picture, overlay]
+    % Background Gradient Fill
+    \fill[DeepEmerald] (current page.north west) rectangle (current page.south east);
+    
+    % Secondary Aesthetic Panel
+    \fill[ForestGreen] ($(current page.north west)+(0,-4)$) -- ($(current page.north east)+(0,-2)$) -- ($(current page.south east)+(0,5)$) -- ($(current page.south west)+(0,3)$) -- cycle;
+
+    % Geometric Parametric Overlay Lines
+    \draw[MintAccent!30, thick, domain=-10:10, samples=100, smooth] 
+        plot ({2*sin(\x r) + \x/2}, {3*cos(2*\x r) - \x});
+    \draw[MintAccent!20, thick, domain=-8:8, samples=100, smooth] 
+        plot ({\x}, {0.2*\x*\x - 5});
+    \draw[MintAccent!15, thick, domain=-10:10, samples=100, smooth] 
+        plot ({\x}, {-0.1*\x*\x + 6});
+        
+    % Decorative Frames
+    \node[anchor=north west] at ($(current page.north west)+(1.8,-2)$) {
+        \textcolor{MintAccent}{\rule{4cm}{2pt}}
+    };
+    
+    % Book Header Title Box
+    \node[anchor=center] at ($(current page.center)+(0,5)$) {
+        \begin{tcolorbox}[
+            width=0.88\textwidth,
+            colback=white,
+            colframe=MintAccent,
+            arc=4mm,
+            boxrule=2pt,
+            halign=center,
+            shadow={2mm}{-2mm}{0mm}{black!30}
+        ]
+            \vspace{0.4cm}
+            {\Huge\bfseries\sffamily\textcolor{DeepEmerald}{ADVANCED CALCULUS}}\\[0.3cm]
+            {\Large\sffamily\textcolor{ForestGreen}{A Comprehensive Treatise on Differential Equations}}\\[0.2cm]
+            {\small\sffamily\textcolor{DarkText}{Ordinary, Partial, and Higher-Order Linear Systems}}
+            \vspace{0.4cm}
+        \end{tcolorbox}
+    };
+
+    % Decorative Math Plot in Center Cover
+    \node[anchor=center] at ($(current page.center)+(0,-1.5)$) {
+        \begin{tikzpicture}[scale=0.85]
+            % Orthogonal Field Rays on Cover
+            \foreach \r in {0.8, 1.6, 2.4, 3.2} {
+                \draw[MintAccent!60, thick] (0,0) circle (\r);
+            }
+            \foreach \angle in {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330} {
+                \draw[white!70, thick, ->] (0,0) -- (\angle:3.6);
+            }
+            \node[fill=MintAccent, circle, inner sep=2pt] at (0,0) {};
+        \end{tikzpicture}
+    };
+
+    % Author and Institution Footer Box
+    \node[anchor=south] at ($(current page.south)+(0,2.5)$) {
+        \begin{tcolorbox}[
+            width=0.75\textwidth,
+            colback=DeepEmerald!90!black,
+            colframe=MintAccent!50,
+            arc=3mm,
+            halign=center
+        ]
+            {\textcolor{white}{\bfseries\sffamily Academic Lecture Notes \& Theoretical Reference}}\\[0.1cm]
+            {\small\textcolor{MintAccent}{\sffamily Typeset with Publication-Quality LaTeX, TikZ, and AMS Environments}}
+        \end{tcolorbox}
+    };
+\end{tikzpicture}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+% =========================================================
+% CHAPTER 1: FUNDAMENTALS OF DIFFERENTIAL EQUATIONS
+% =========================================================
+\chapter{Fundamentals of Differential Equations}
+
+\section{Definitions and Categorization}
+
+Differential equations form the foundational language of dynamic modeling across pure mathematics, physics, engineering, and mathematical biology.
+
+\begin{definitionbox}[Differential Equation (DE)]
+A \textbf{differential equation} is any equation involving one or more dependent variables, one or more independent variables, and the ordinary or partial derivatives of the dependent variables with respect to the independent variables.
+\end{definitionbox}
+
+Differential equations are broadly classified into two main categories based on the structure of their derivatives:
+
+\begin{definitionbox}[Ordinary Differential Equation (ODE)]
+An \textbf{ordinary differential equation (ODE)} is a differential equation containing ordinary derivatives of one or more dependent variables with respect to a \emph{single} independent variable.
+\end{definitionbox}
+
+\begin{definitionbox}[Partial Differential Equation (PDE)]
+A \textbf{partial differential equation (PDE)} is a differential equation containing partial derivatives of one or more dependent variables with respect to \emph{two or more} independent variables.
+\end{definitionbox}
+
+\begin{summarybox}[Classification of Differential Equations by Category]
+    \textbf{Ordinary Differential Equations (ODE):}
+    \begin{equation}
+        \frac{d^2 y}{dx^2} + x y \left(\frac{dy}{dx}\right)^2 = 0
+    \end{equation}
+    \begin{equation}
+        \frac{d^4 x}{dt^4} + 5\frac{d^2 x}{dt^2} + 3x = \sin(t)
+    \end{equation}
+
+    \textbf{Partial Differential Equations (PDE):}
+    \begin{equation}
+        \frac{\partial v}{\partial \sigma} + \frac{\partial v}{\partial t} = v
+    \end{equation}
+    \begin{equation}
+        \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} + \frac{\partial^2 u}{\partial z^2} = 0 \quad \text{(Laplace's Equation)}
+    \end{equation}
+
+    \textbf{Standard Calculus Derivatives (Not DEs):}
+    \begin{equation}
+        \frac{d}{dx}\left(e^{ax}\right) = a e^{ax}, \qquad \frac{d}{dx}(u v) = u \frac{dv}{dx} + v \frac{du}{dx}
+    \end{equation}
+\end{summarybox}
+
+\section{Order and Degree of a Differential Equation}
+
+\begin{definitionbox}[Order of a Differential Equation]
+The \textbf{order} of a differential equation is defined as the order of the highest-order derivative appearing in the equation.
+\end{definitionbox}
+
+\begin{definitionbox}[Degree of a Differential Equation]
+The \textbf{degree} of a differential equation is the algebraic degree (highest polynomial power) of the highest-order derivative present in the equation, after the equation has been cleared of radicals and fractional exponents with respect to derivatives.
+\end{definitionbox}
+
+\begin{summarybox}[Examples of Order and Degree Classification]
+    \begin{itemize}[leftmargin=0.6cm]
+        \item \textbf{1st Order, 1st Degree ODE:}
+        \[ \frac{dy}{dx} + y = e^x \]
+        \item \textbf{2nd Order, 1st Degree ODE:}
+        \[ \frac{d^2 y}{dx^2} + 3\frac{dy}{dx} + 2y = 0 \]
+        \item \textbf{2nd Order, 2nd Degree ODE:}
+        \[ \left(\frac{d^2 y}{dx^2}\right)^2 + y \frac{dy}{dx} = 0 \]
+        \item \textbf{1st Order, 1st Degree PDE:}
+        \[ \frac{\partial u}{\partial t} + \frac{\partial u}{\partial x} = 0 \]
+        \item \textbf{2nd Order, 1st Degree PDE (Wave Equation):}
+        \[ \frac{\partial^2 u}{\partial t^2} - c^2 \frac{\partial^2 u}{\partial x^2} = 0 \]
+        \item \textbf{2nd Order, 2nd Degree PDE:}
+        \[ \left(\frac{\partial^2 u}{\partial x^2}\right)^2 + \left(\frac{\partial^2 u}{\partial y^2}\right)^2 = 0 \]
+    \end{itemize}
+\end{summarybox}
+
+\section{Linearity Criteria and Classification}
+
+Linearity plays a fundamental role in solution existence, superposition properties, and analytical tractability.
+
+\begin{definitionbox}[Linear Ordinary Differential Equation]
+An $n$-th order ordinary differential equation in the dependent variable $y$ and independent variable $x$ is called \textbf{linear} if it can be written in the explicit representation:
+\begin{equation}
+    a_0(x) \frac{d^n y}{dx^n} + a_1(x) \frac{d^{n-1} y}{dx^{n-1}} + \dots + a_{n-1}(x) \frac{dy}{dx} + a_n(x) y = f(x)
+\end{equation}
+or in compact notation:
+\begin{equation}
+    a_0(x) y^{(n)} + a_1(x) y^{(n-1)} + \dots + a_n(x) y = f(x)
+\end{equation}
+where $a_0(x) \neq 0$ and $a_0(x), a_1(x), \dots, a_n(x), f(x)$ are given functions of $x$.
+\end{definitionbox}
+
+\begin{summarybox}[Key Criteria for Linearity]
+An ODE is strictly \textbf{linear} if and only if it satisfies three structural rules:
+\begin{enumerate}[leftmargin=0.6cm]
+\item The dependent variable $y$ and all its derivatives $y', y'', \dots, y^{(n)}$ occur to the \textbf{first degree only}.
+\item No product terms involving $y$ and its derivatives (e.g., $y \cdot \frac{dy}{dx}$) or products of derivatives exist.
+\item No non-linear transcendental functions of $y$ or its derivatives are present (e.g., $\sin(y)$, $e^y$, $\ln(y')$).
+\end{enumerate}
+\end{summarybox}
+
+\begin{definitionbox}[Nonlinear Ordinary Differential Equation]
+An ordinary differential equation is classified as \textbf{nonlinear} if it violates any of the three linearity criteria outlined above. The general implicit form of an $n$-th order nonlinear ODE is:
+\begin{equation}
+    F\left(x, y, \frac{dy}{dx}, \frac{d^2 y}{dx^2}, \dots, \frac{d^n y}{dx^n}\right) = 0
+\end{equation}
+\end{definitionbox}
+
+\begin{examplebox}[Comparing Linear and Nonlinear ODEs]
+    \textbf{Linear ODE with Constant Coefficients:}
+    \[ \frac{d^2 y}{dx^2} + 3\frac{dy}{dx} + 2y = 0 \]
+
+    \textbf{Linear ODE with Variable Coefficients:}
+    \[ \frac{d^4 y}{dx^4} + x^{30} \frac{dy}{dx} + 2y = x e^x \]
+
+    \textbf{Nonlinear ODE Examples:}
+    \begin{align*}
+        \left(\frac{d^2 y}{dx^2}\right)^2 + y \frac{dy}{dx} &= 0 \quad \text{(Violates degree and product rule)} \\
+        \frac{dy}{dx} + \sin(y) &= 0 \quad \text{(Violates transcendental function rule)} \\
+        A \frac{d^2 y}{dx^2} + K \frac{d^3 y}{dx^3} + x \frac{dy}{dx} &= x e^x \frac{dx}{dy} \quad \text{(Violates derivative exponent rule)}
+    \end{align*}
+\end{examplebox}
+
+\section{Origins and Engineering Applications}
+
+Differential equations naturally model systems undergoing continuous change across science and technology:
+\begin{itemize}[leftmargin=0.6cm]
+    \item \textbf{Population Dynamics:} Malthusian growth models, logistic population growth, and Lotka-Volterra predator-prey systems.
+    \item \textbf{Dynamical Systems \& Chaos:} Nonlinear pendulum motion, forced oscillators, and atmospheric convection.
+    \item \textbf{Fluid Dynamics:} Navier-Stokes equations governing incompressible and compressible flow fields.
+    \item \textbf{Heat Transfer:} Heterogeneous conduction, thermal diffusion, and transient cooling.
+    \item \textbf{Mathematical Biology \& Biophysics:} Enzyme kinetics, nerve impulse propagation (Hodgkin-Huxley model), and epidemic spreads.
+\end{itemize}
+
+\section{Formation of Differential Equations}
+
+A differential equation representing a family of curves is generated by differentiating the general equation containing arbitrary constants and subsequently eliminating those constants.
+
+\begin{examplebox}[Elimination of Constants]
+Form the ordinary differential equation corresponding to the family of curves given by:
+\begin{equation}
+    y = a x + b x^2 \label{eq:form1}
+\end{equation}
+where $a$ and $b$ are arbitrary constants.
+
+\textbf{Solution:}
+Since the equation contains two arbitrary constants ($a$ and $b$), we differentiate Equation \eqref{eq:form1} twice consecutively with respect to $x$.
+
+\textbf{Step 1 (First Differentiation):}
+\begin{equation}
+    \frac{dy}{dx} = a + 2bx \label{eq:form2}
+\end{equation}
+
+\textbf{Step 2 (Second Differentiation):}
+\begin{equation}
+    \frac{d^2 y}{dx^2} = 2b \implies b = \frac{1}{2} \frac{d^2 y}{dx^2} \label{eq:b_expr}
+\end{equation}
+
+\textbf{Step 3 (Eliminating Constant $a$):}
+Substitute the expression for $b$ from Equation \eqref{eq:b_expr} into Equation \eqref{eq:form2}:
+\[
+\frac{dy}{dx} = a + 2\left(\frac{1}{2} \frac{d^2 y}{dx^2}\right)x = a + x \frac{d^2 y}{dx^2}
+\]
+Solving for $a$:
+\begin{equation}
+    a = \frac{dy}{dx} - x \frac{d^2 y}{dx^2} \label{eq:a_expr}
+\end{equation}
+
+\textbf{Step 4 (Final Substitution into Original Equation):}
+Substitute $a$ and $b$ back into Equation \eqref{eq:form1}:
+\[
+y = \left(\frac{dy}{dx} - x \frac{d^2 y}{dx^2}\right)x + \left(\frac{1}{2} \frac{d^2 y}{dx^2}\right)x^2
+\]
+Expanding and simplifying:
+\[
+y = x \frac{dy}{dx} - x^2 \frac{d^2 y}{dx^2} + \frac{1}{2}x^2 \frac{d^2 y}{dx^2} = x \frac{dy}{dx} - \frac{1}{2}x^2 \frac{d^2 y}{dx^2}
+\]
+Multiplying through by $2$ and rearranging into standard order yields:
+\begin{equation}
+    x^2 \frac{d^2 y}{dx^2} - 2x \frac{dy}{dx} + 2y = 0
+\end{equation}
+This is a 2nd-order, 1st-degree linear ordinary differential equation.
+\end{examplebox}
+
+% =========================================================
+% CHAPTER 2: SOLUTIONS AND EXISTENCE THEORY
+% =========================================================
+\chapter{Solutions and Existence Theory}
+
+\section{General, Particular, and Singular Solutions}
+
+\begin{definitionbox}[General Solution (Complete Primitive)]
+The relation involving $n$ independent arbitrary constants that satisfies an $n$-th order ordinary differential equation is termed its \textbf{general solution} (or complete primitive).
+\end{definitionbox}
+
+\begin{definitionbox}[Particular Solution]
+A \textbf{particular solution} is a solution derived from the general solution by assigning specific numerical values to the arbitrary constants, typically dictated by initial or boundary conditions.
+\end{definitionbox}
+
+\begin{summarybox}[Geometric Interpretation]
+Geometrically, the general solution (primitive) represents an $n$-parameter \textbf{family of curves} satisfying the differential equation, whereas a particular solution represents a \textbf{single curve} belonging to this family.
+\end{summarybox}
+
+\begin{examplebox}[Differential Equation of a Parabolic Family]
+Form the differential equation of all parabolas whose axes are parallel to the $y$-axis:
+\begin{equation}
+    (x - h)^2 = 4a(y - k) \label{eq:parabola}
+\end{equation}
+where $a, h, k$ are arbitrary constants.
+
+\textbf{Solution:}
+Differentiating Equation \eqref{eq:parabola} with respect to $x$:
+\[
+2(x - h) = 4a \frac{dy}{dx} \implies x - h = 2a \frac{dy}{dx}
+\]
+Differentiating a second time with respect to $x$:
+\[
+1 = 2a \frac{d^2 y}{dx^2} \implies \frac{d^2 y}{dx^2} = \frac{1}{2a}
+\]
+Differentiating a third time eliminates the constant $a$:
+\begin{equation}
+    \frac{d^3 y}{dx^3} = 0
+\end{equation}
+This third-order ordinary differential equation represents the entire family of parabolas.
+\end{examplebox}
+
+\section{Explicit vs. Implicit Solutions}
+
+Consider an $n$-th order real ODE expressed as $F\left(x, y, y', \dots, y^{(n)}\right) = 0$.
+
+\begin{definitionbox}[Explicit Solution]
+A real-valued function $y = f(x)$ defined on an interval $I \subseteq \mathbb{R}$ is an \textbf{explicit solution} if:
+\begin{enumerate}[leftmargin=0.6cm]
+\item $f(x)$ possesses continuous derivatives up to order $n$ on $I$.
+\item $F\left(x, f(x), f'(x), \dots, f^{(n)}(x)\right) = 0$ holds identically for all $x \in I$.
+\end{enumerate}
+\end{definitionbox}
+
+\begin{definitionbox}[Implicit Solution]
+A relation $g(x,y) = 0$ is an \textbf{implicit solution} of the ODE on $I$ if the relation implicitly defines at least one function $y = f(x)$ that is an explicit solution on $I$.
+\end{definitionbox}
+
+\begin{examplebox}[Verification of an Explicit Solution]
+Show that $f(x) = 2\sin(x) + 3\cos(x)$ is an explicit solution of $y'' + y = 0$ for all $x \in \mathbb{R}$.
+
+\textbf{Solution:}
+Given $f(x) = 2\sin(x) + 3\cos(x)$, we compute its derivatives:
+\[
+f'(x) = 2\cos(x) - 3\sin(x), \qquad f''(x) = -2\sin(x) - 3\cos(x)
+\]
+Substituting into the differential equation:
+\[
+f''(x) + f(x) = \Big(-2\sin(x) - 3\cos(x)\Big) + \Big(2\sin(x) + 3\cos(x)\Big) = 0
+\]
+Since this holds identically for all $x \in \mathbb{R}$, $f(x)$ is an explicit solution.
+\end{examplebox}
+
+\section{Initial Value Problems (IVP) and Boundary Value Problems (BVP)}
+
+\begin{definitionbox}[Initial Value Problem (IVP)]
+An \textbf{Initial Value Problem (IVP)} consists of a differential equation accompanied by supplementary conditions specified at a \textbf{single point} $x_0$:
+\begin{equation}
+    y(x_0) = y_0, \quad y'(x_0) = y_1, \quad \dots, \quad y^{(n-1)}(x_0) = y_{n-1}
+\end{equation}
+\end{definitionbox}
+
+\begin{definitionbox}[Boundary Value Problem (BVP)]
+A \textbf{Boundary Value Problem (BVP)} consists of a differential equation accompanied by supplementary conditions specified at \textbf{two or more distinct points} $x_a, x_b$:
+\begin{equation}
+    y(x_a) = y_a, \qquad y(x_b) = y_b
+\end{equation}
+\end{definitionbox}
+
+\begin{examplebox}[Contrasting IVP and BVP]
+    \textbf{Initial Value Problem (IVP):}
+    \[ \frac{d^2 y}{dx^2} + y = 0, \qquad y(1) = 3, \quad y'(1) = -4 \quad \text{(Both conditions at $x = 1$)} \]
+
+    \textbf{Boundary Value Problem (BVP):}
+    \[ \frac{d^2 y}{dx^2} + y = 0, \qquad y(0) = 1, \quad y\left(\frac{\pi}{2}\right) = 5 \quad \text{(Conditions at $x = 0$ and $x = \pi/2$)} \]
+\end{examplebox}
+
+\section{Picard-Lindelöf Existence and Uniqueness Theorem}
+
+\begin{theorembox}[Picard-Lindelöf Theorem]
+Consider the first-order initial value problem:
+\begin{equation}
+    \frac{dy}{dx} = f(x,y), \qquad y(x_0) = y_0
+\end{equation}
+Let $f(x,y)$ and its partial derivative $\frac{\partial f}{\partial y}$ be continuous in a closed rectangular region $D = \{(x,y) \mid |x - x_0| \le a, |y - y_0| \le b\}$.
+
+Then, there exists a \textbf{unique solution} $y = \phi(x)$ defined on an interval $|x - x_0| \le h$ (where $h \le a$), satisfying the initial condition $\phi(x_0) = y_0$.
+\end{theorembox}
+
+% =========================================================
+% CHAPTER 3: FIRST-ORDER ORDINARY DIFFERENTIAL EQUATIONS
+% =========================================================
+\chapter{First-Order Ordinary Differential Equations}
+
+A first-order ODE can be expressed in derivative form $\frac{dy}{dx} = f(x,y)$ or differential form $M(x,y)dx + N(x,y)dy = 0$.
+
+\section{Separable Equations and Reducible Forms}
+
+\begin{definitionbox}[Separable Differential Equation]
+A differential equation is \textbf{separable} if it can be written as:
+\begin{equation}
+    F(x)G(y)dx + f(x)g(y)dy = 0 \implies \frac{F(x)}{f(x)}dx + \frac{g(y)}{G(y)}dy = 0
+\end{equation}
+\end{definitionbox}
+
+\begin{examplebox}[Separable Equation Solution]
+Solve the initial value problem:
+\[ x \ln(y) dx + (x^2 + 1) \cos(y) dy = 0, \qquad y(1) = \frac{\pi}{2} \]
+
+\textbf{Solution:}
+Separating variables:
+\[ \frac{x}{x^2 + 1} dx + \frac{\cos(y)}{\ln(y)} dy = 0 \]
+For the initial condition $y(1) = \frac{\pi}{2}$, integrating both terms yields the complete explicit curve passing through $(1, \pi/2)$.
+\end{examplebox}
+
+\begin{examplebox}[Reducible to Separable Form]
+Solve $\frac{dy}{dx} = (4x + y + 1)^2$.
+
+\textbf{Solution:}
+Let $u = 4x + y + 1$. Differentiating with respect to $x$:
+\[ \frac{du}{dx} = 4 + \frac{dy}{dx} \implies \frac{dy}{dx} = \frac{du}{dx} - 4 \]
+Substituting into the ODE:
+\[ \frac{du}{dx} - 4 = u^2 \implies \frac{du}{u^2 + 4} = dx \]
+Integrating both sides:
+\[ \frac{1}{2} \arctan\left(\frac{u}{2}\right) = x + C \implies \arctan\left(\frac{4x + y + 1}{2}\right) = 2x + 2C \]
+Taking the tangent of both sides:
+\begin{equation}
+    4x + y + 1 = 2 \tan(2x + K)
+\end{equation}
+\end{examplebox}
+
+\section{Homogeneous Differential Equations}
+
+\begin{definitionbox}[Homogeneous Function and DE]
+A function $f(x,y)$ is homogeneous of degree $n$ if $f(k x, k y) = k^n f(x,y)$. The equation $M(x,y)dx + N(x,y)dy = 0$ is \textbf{homogeneous} if $M$ and $N$ are homogeneous functions of the same degree.
+\end{definitionbox}
+
+Substitution $y = v x$ (hence $\frac{dy}{dx} = v + x \frac{dv}{dx}$) reduces any homogeneous equation into a separable equation.
+
+\begin{examplebox}[Homogeneous Differential Equation]
+Solve $(x^2 + y^2)dx + 2xy dy = 0$.
+
+\textbf{Solution:}
+Expressing in derivative form:
+\[ \frac{dy}{dx} = -\frac{x^2 + y^2}{2xy} \]
+Substituting $y = v x$ and $\frac{dy}{dx} = v + x \frac{dv}{dx}$:
+\[ v + x \frac{dv}{dx} = -\frac{x^2 + v^2 x^2}{2 x^2 v} = -\frac{1 + v^2}{2v} \]
+Rearranging:
+\[ x \frac{dv}{dx} = -\frac{1 + v^2}{2v} - v = -\frac{1 + 3v^2}{2v} \implies \frac{2v}{1 + 3v^2} dv = -\frac{dx}{x} \]
+Integrating both sides:
+\[ \frac{1}{3} \ln(1 + 3v^2) = -\ln(x) + \ln(C) \implies \ln\Big(x^3(1 + 3v^2)\Big) = \ln(C') \]
+Substituting $v = y/x$:
+\begin{equation}
+    x^3 \left(1 + 3\frac{y^2}{x^2}\right) = C \implies x^3 + 3x y^2 = C
+\end{equation}
+\end{examplebox}
+
+\section{First-Order Linear Differential Equations}
+
+A first-order linear ODE has the canonical form:
+\begin{equation}
+    \frac{dy}{dx} + P(x)y = Q(x)
+\end{equation}
+Multiplying by the \textbf{Integrating Factor (I.F.)} $\mu(x) = e^{\int P(x)dx}$ transforms the left-hand side into an exact product derivative:
+\begin{equation}
+    \frac{d}{dx}\left[ y e^{\int P(x)dx} \right] = Q(x) e^{\int P(x)dx} \implies y = e^{-\int P(x)dx} \left[ \int Q(x) e^{\int P(x)dx} dx + C \right]
+\end{equation}
+
+\section{Bernoulli Equations}
+
+\begin{definitionbox}[Bernoulli Equation]
+An equation of the form:
+\begin{equation}
+    \frac{dy}{dx} + P(x)y = Q(x)y^n \qquad (n \neq 0, 1)
+\end{equation}
+is a \textbf{Bernoulli differential equation}.
+\end{definitionbox}
+
+Dividing by $y^n$ and substituting $v = y^{1-n}$ transforms it into a first-order linear ODE in $v$:
+\begin{equation}
+    \frac{dv}{dx} + (1-n)P(x)v = (1-n)Q(x)
+\end{equation}
+
+\section{Exact Differential Equations}
+
+\begin{theorembox}[Condition for Exactness]
+The differential form $M(x,y)dx + N(x,y)dy = 0$ is \textbf{exact} if and only if:
+\begin{equation}
+    \frac{\partial M}{\partial y} = \frac{\partial N}{\partial x}
+\end{equation}
+If exact, there exists a potential function $F(x,y)$ such that $\frac{\partial F}{\partial x} = M$ and $\frac{\partial F}{\partial y} = N$, giving the general solution $F(x,y) = C$.
+\end{theorembox}
+
+\section{Orthogonal Trajectories}
+
+An \textbf{orthogonal trajectory} is a curve that intersects every member of a given family of curves at right angles ($90^\circ$).
+
+\begin{summarybox}[Rule for Finding Orthogonal Trajectories]
+\begin{enumerate}[leftmargin=0.6cm]
+\item For Cartesian family $f(x,y,c) = 0$: find ODE $F(x,y,y') = 0$, replace $y' \to -\frac{1}{y'}$, and integrate.
+\item For Polar family $f(r,\theta,c) = 0$: find ODE $F(r,\theta,r') = 0$, replace $\frac{dr}{d\theta} \to -r^2 \frac{d\theta}{dr}$, and integrate.
+\end{enumerate}
+\end{summarybox}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.1]
+    % Concentric Circles Family (Original)
+    \foreach \r in {0.6, 1.2, 1.8, 2.4, 3.0} {
+        \draw[ForestGreen, thick] (0,0) circle (\r);
+    }
+    % Orthogonal Lines Family
+    \foreach \angle in {0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330} {
+        \draw[DeepEmerald!80, dashed, thick] (-\angle:3.3) -- (\angle:3.3);
+    }
+    % Axes
+    \draw[->, >=stealth, thick] (-3.6,0) -- (3.6,0) node[right] {$x$};
+    \draw[->, >=stealth, thick] (0,-3.6) -- (0,3.6) node[above] {$y$};
+    \node[fill=white, inner sep=1pt] at (2.2,2.2) {\textcolor{ForestGreen}{$x^2 + y^2 = C^2$}};
+    \node[fill=white, inner sep=1pt] at (-2.5,1.2) {\textcolor{DeepEmerald}{$y = k x$}};
+\end{tikzpicture}
+\caption{Orthogonal trajectories: Concentric circles $x^2 + y^2 = C^2$ (solid green) intersected perpendicularly by radial lines $y = k x$ (dashed emerald).}
+\label{fig:orthogonal_circles}
+\end{figure}
+
+\begin{examplebox}[Parabolic Orthogonal Trajectories]
+Find the orthogonal trajectories of the parabolic family $y = c x^2$.
+
+\textbf{Solution:}
+Differentiating $y = c x^2$ gives $\frac{dy}{dx} = 2c x = 2\left(\frac{y}{x^2}\right)x = \frac{2y}{x}$.
+Replacing $\frac{dy}{dx}$ with $-\frac{dx}{dy}$ for orthogonality:
+\[ -\frac{dx}{dy} = \frac{2y}{x} \implies x dx + 2y dy = 0 \]
+Integrating both sides:
+\begin{equation}
+    \frac{x^2}{2} + y^2 = C' \implies x^2 + 2y^2 = K^2
+\end{equation}
+The orthogonal trajectories form a family of \textbf{ellipses} centered at the origin.
+\end{examplebox}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=0.95]
+    \begin{axis}[
+        xmin=-3, xmax=3, ymin=-3, ymax=3,
+        axis lines=middle,
+        xlabel={$x$}, ylabel={$y$},
+        grid=both,
+        grid style={line width=.1pt, draw=gray!20},
+        major grid style={line width=.2pt, draw=gray!40},
+        domain=-2.5:2.5,
+        samples=100
+    ]
+        % Parabolas
+        \addplot[ForestGreen, thick] {0.4*x^2};
+        \addplot[ForestGreen, thick] {0.8*x^2};
+        \addplot[ForestGreen, thick] {-0.4*x^2};
+        \addplot[ForestGreen, thick] {-0.8*x^2};
+
+        % Ellipses (Orthogonal trajectories)
+        \addplot[DeepEmerald, dashed, thick, domain=-1.414:1.414] {sqrt(1 - 0.5*x^2)};
+        \addplot[DeepEmerald, dashed, thick, domain=-1.414:1.414] {-sqrt(1 - 0.5*x^2)};
+        \addplot[DeepEmerald, dashed, thick, domain=-2.0:2.0] {sqrt(2 - 0.5*x^2)};
+        \addplot[DeepEmerald, dashed, thick, domain=-2.0:2.0] {-sqrt(2 - 0.5*x^2)};
+    \end{axis}
+\end{tikzpicture}
+\caption{Parabolas $y = c x^2$ (solid green) and their orthogonal elliptical trajectories $x^2 + 2y^2 = K^2$ (dashed dark green).}
+\label{fig:parabola_ellipse}
+\end{figure}
+
+% =========================================================
+% CHAPTER 4: HIGHER-ORDER LINEAR DIFFERENTIAL EQUATIONS
+% =========================================================
+\chapter{Higher-Order Linear Differential Equations}
+
+\section{General Theory and Superposition Principle}
+
+An $n$-th order non-homogeneous linear ODE is represented by:
+\begin{equation}
+    a_0(x)\frac{d^n y}{dx^n} + a_1(x)\frac{d^{n-1} y}{dx^{n-1}} + \dots + a_n(x)y = F(x)
+\end{equation}
+
+\begin{theorembox}[Superposition Principle]
+If $y_1, y_2, \dots, y_m$ are solutions of the homogeneous linear ODE ($F(x) = 0$), then any linear combination:
+\begin{equation}
+    y(x) = c_1 y_1(x) + c_2 y_2(x) + \dots + c_m y_m(x)
+\end{equation}
+is also a solution.
+\end{theorembox}
+
+\section{Linear Independence and the Wronskian Determinant}
+
+\begin{definitionbox}[Wronskian Determinant]
+For $n$ differentiable functions $f_1, f_2, \dots, f_n$, the \textbf{Wronskian} $W(f_1, \dots, f_n)$ is defined as:
+\begin{equation}
+    W(f_1, f_2, \dots, f_n)(x) = 
+    \begin{vmatrix}
+        f_1(x) & f_2(x) & \dots & f_n(x) \\
+        f_1'(x) & f_2'(x) & \dots & f_n'(x) \\
+        \vdots & \vdots & \ddots & \vdots \\
+        f_1^{(n-1)}(x) & f_2^{(n-1)}(x) & \dots & f_n^{(n-1)}(x)
+    \end{vmatrix}
+\end{equation}
+\end{definitionbox}
+
+\begin{theorembox}[Wronskian Test for Linear Independence]
+Solutions $y_1, y_2, \dots, y_n$ of an $n$-th order homogeneous linear ODE are \textbf{linearly independent} on an interval $I$ if and only if $W(y_1, y_2, \dots, y_n)(x) \neq 0$ for at least one $x \in I$.
+\end{theorembox}
+
+\begin{examplebox}[Wronskian Verification]
+Verify that $e^x, e^{-x}, e^{2x}$ are linearly independent solutions of $y''' - 2y'' - y' + 2y = 0$.
+
+\textbf{Solution:}
+Evaluating the Wronskian:
+\[
+W(e^x, e^{-x}, e^{2x}) = 
+\begin{vmatrix}
+    e^x & e^{-x} & e^{2x} \\
+    e^x & -e^{-x} & 2e^{2x} \\
+    e^x & e^{-x} & 4e^{2x}
+\end{vmatrix}
+= e^x \cdot e^{-x} \cdot e^{2x}
+\begin{vmatrix}
+    1 & 1 & 1 \\
+    1 & -1 & 2 \\
+    1 & 1 & 4
+\end{vmatrix}
+\]
+Computing the determinant:
+\[
+1(-4 - 2) - 1(4 - 2) + 1(1 - (-1)) = -6 - 2 + 2 = -6
+\]
+Thus $W = -6 e^{2x} \neq 0$ for all $x \in \mathbb{R}$, proving linear independence.
+\end{examplebox}
+
+\section{Reduction of Order}
+
+If one non-trivial solution $y_1(x)$ of an $n$-th order linear homogeneous ODE is known, the substitution $y(x) = v(x) y_1(x)$ reduces the ODE to an $(n-1)$-th order linear ODE in $w = v'$.
+
+\section{Homogeneous Linear ODEs with Constant Coefficients}
+
+For $a_0 y^{(n)} + a_1 y^{(n-1)} + \dots + a_n y = 0$, substituting $y = e^{m x}$ yields the \textbf{Auxiliary (Characteristic) Equation}:
+\begin{equation}
+    a_0 m^n + a_1 m^{n-1} + \dots + a_n = 0
+\end{equation}
+
+\begin{summarybox}[Root Cases for the Auxiliary Equation]
+\begin{enumerate}[leftmargin=0.6cm]
+\item \textbf{Distinct Real Roots} ($m_1 \neq m_2 \dots \neq m_n$):
+    \[ y_c = c_1 e^{m_1 x} + c_2 e^{m_2 x} + \dots + c_n e^{m_n x} \]
+\item \textbf{Repeated Real Roots} ($m_1 = m_2 = \dots = m_k = m$):
+    \[ y_c = (c_1 + c_2 x + c_3 x^2 + \dots + c_k x^{k-1}) e^{m x} \]
+\item \textbf{Complex Conjugate Roots} ($m = \alpha \pm i \beta$):
+    \[ y_c = e^{\alpha x} \Big( c_1 \cos(\beta x) + c_2 \sin(\beta x) \Big) \]
+\end{enumerate}
+\end{summarybox}
+
+\begin{examplebox}[Complex Roots Initial Value Problem]
+Solve the IVP: $y'' - 6y' + 25y = 0$, with $y(0) = -3, y'(0) = -1$.
+
+\textbf{Solution:}
+Auxiliary equation: $m^2 - 6m + 25 = 0 \implies m = \frac{6 \pm \sqrt{36 - 100}}{2} = 3 \pm 4i$.
+General solution:
+\[ y(x) = e^{3x} \Big( c_1 \cos(4x) + c_2 \sin(4x) \Big) \]
+Applying $y(0) = -3 \implies c_1 = -3$.
+Differentiating and applying $y'(0) = -1$:
+\[ y'(x) = 3e^{3x}(c_1 \cos 4x + c_2 \sin 4x) + e^{3x}(-4c_1 \sin 4x + 4c_2 \cos 4x) \]
+\[ -1 = 3(-3) + 4c_2 \implies 4c_2 = 8 \implies c_2 = 2 \]
+The unique solution is:
+\begin{equation}
+    y(x) = e^{3x} \Big( 2\sin(4x) - 3\cos(4x) \Big)
+\end{equation}
+\end{examplebox}
+
+\section{Non-Homogeneous ODEs and Particular Integrals}
+
+The general solution of a non-homogeneous ODE is $y = y_c + y_p$ (Complementary Function + Particular Integral).
+
+Using the differential operator $D \equiv \frac{d}{dx}$, $y_p = \frac{1}{f(D)} F(x)$.
+
+\begin{summarybox}[Inverse Operator $D$-Rules]
+\begin{enumerate}[leftmargin=0.6cm]
+\item \textbf{Exponential Source} $F(x) = e^{ax}$:
+    \[ \frac{1}{f(D)} e^{ax} = \frac{1}{f(a)} e^{ax} \quad \text{if } f(a) \neq 0 \]
+    \textit{Failure Case:} If $f(a) = 0$, $\frac{1}{f(D)} e^{ax} = x \frac{1}{f'(a)} e^{ax}$.
+\item \textbf{Sinusoidal Source} $F(x) = \sin(ax)$ or $\cos(ax)$: Replace $D^2 \to -a^2$.
+\item \textbf{Polynomial Source} $F(x) = x^m$: Expand $[f(D)]^{-1}$ as a binomial series in ascending powers of $D$.
+\item \textbf{Exponential Shift}: $\frac{1}{f(D)}\left( e^{ax} V(x) \right) = e^{ax} \frac{1}{f(D+a)} V(x)$.
+\end{enumerate}
+\end{summarybox}
+
+\end{document}
